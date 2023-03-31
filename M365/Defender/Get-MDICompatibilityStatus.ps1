@@ -69,7 +69,7 @@ function Test-MDITenant {
 
 function Test-MDILocalServiceUpdate {
     # Test local captor update service
-    Test-NetConnection -ComputerName localhost -Port $mdi_Port444
+    Test-NetConnection -ComputerName localhost -Port $mdi_Port
 }
 
 # Main script block

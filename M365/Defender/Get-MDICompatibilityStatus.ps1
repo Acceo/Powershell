@@ -24,9 +24,9 @@
     Ref: https://learn.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed#minimum-version
 
 .NOTES
-    Version:        1.0
+    Version:        1.1
     Creation Date:  31 mars 2023
-    Last Updated:   S/O
+    Last Updated:   12 avril 2023
     Author:         Jean-Luc Gauthier
     Organization:   Phoenix Design
     Contact:        S/O
@@ -42,15 +42,16 @@ param (
     [Parameter(Mandatory = $false, HelpMessage = 'Inscrivez le port de communication pour le service de mise à jour du capteur (defaut 444)')]
     [string] $mdi_Port = 444,
     [Parameter(Mandatory = $false, HelpMessage = 'Inscrivez le no de la version minimum du .Net Framework')]
-    [int] $min_NetFramework = 460798
+    [int] $min_NetFramework = 528040
 )
 
-function Get-NetFramworkVersion {
-    (Get-ItemPropertyValue -LiteralPath 'HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Release)
+function Get-NetFrameworkVersion {
+    [int](Get-ItemPropertyValue -LiteralPath 'HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Release)
 }
 
 function Test-MDITenant {
     # Test DNS Resolution
+    $mdi_Tenant = $mdi_Tenant+"sensorapi.atp.azure.com"
     if (Resolve-DnsName -Name $mdi_Tenant) {
         Write-Host "Resolution DNS effectuee pour $mdi_Tenant" -f Green
 
@@ -69,17 +70,18 @@ function Test-MDITenant {
 
 function Test-MDILocalServiceUpdate {
     # Test local captor update service
-    Test-NetConnection -ComputerName localhost -Port $mdi_Port
+    Test-NetConnection -ComputerName localhost -Port $mdi_Port444
 }
 
 # Main script block
 
 # Check minimum requierments
-if (Get-NetFramworkVersion -gt $min_NetFramework) {
+$inst_NetFramework = Get-NetFrameworkVersion
+if ( $inst_NetFramework -gt $min_NetFramework) {
     Write-Host "La version .Net Framework est supportée" -f Green
 }
 else {
-    Write-Warning "La version du .Net Framwork n'est pas à jour (minimum 4.7)"
+    Write-Warning "La version du .Net Framwork n'est pas à jour (minimum 4.8)"
 }
 Test-MDITenant
 

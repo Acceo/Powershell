@@ -21,6 +21,9 @@
     Get-MDICompatibilityStatus.ps1 -mdi_Tenant "monTenant" -Min_NetFramework 461308
 
 .LINK
+    Ref: https://github.com/PhxDesign/Powershell/tree/main/M365/Defender
+
+.LINK
     Ref: https://learn.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed#minimum-version
 
 .NOTES
